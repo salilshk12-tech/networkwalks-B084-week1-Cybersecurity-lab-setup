@@ -1,297 +1,271 @@
-# networkwalks-B084-week1-Cybersecurity-lab-setup
-🛡️ Cybersecurity Lab Setup: VirtualBox + Kali Linux
+<div align="center">
 
-An isolated virtual lab for ethical hacking and penetration testing practice.
+# 🛡️ Cybersecurity Home Lab: VirtualBox + Kali Linux
 
-"VirtualBox" (https://img.shields.io/badge/VirtualBox-7.x-183A61?style=flat-square&logo=virtualbox&logoColor=white)
-"Kali Linux" (https://img.shields.io/badge/Kali%20Linux-2026.3-557C94?style=flat-square&logo=kalilinux&logoColor=white)
-"Network" (https://img.shields.io/badge/Network-10.0.0.0%2F24-238F89?style=flat-square)
-"Batch" (https://img.shields.io/badge/Networkwalks-B084-C00000?style=flat-square)
-"Status" (https://img.shields.io/badge/Status-Phase%201%20Complete-brightgreen?style=flat-square)
+**A private, isolated NAT Network lab for ethical hacking and penetration testing practice**
 
----
+![VirtualBox](https://img.shields.io/badge/VirtualBox-7.x-183A61?style=for-the-badge&logo=virtualbox&logoColor=white)
+![Kali Linux](https://img.shields.io/badge/Kali%20Linux-2026.3-557C94?style=for-the-badge&logo=kalilinux&logoColor=white)
+![Network](https://img.shields.io/badge/Network-10.0.0.0%2F24-238F89?style=for-the-badge)
+![Batch](https://img.shields.io/badge/Networkwalks-B084-C00000?style=for-the-badge)
+![Status](https://img.shields.io/badge/Phase%201-Complete-brightgreen?style=for-the-badge)
 
-📌 Overview
-
-This repository documents Week 1, Project 1 of my cybersecurity training with Networkwalks (Batch B084).
-
-The objective was to build a virtual cybersecurity lab using Oracle VirtualBox and Kali Linux.
-
-I configured Kali Linux as my attacker machine using a custom NAT Network with the subnet "10.0.0.0/24".
-
-The lab uses a static IP address, allowing additional virtual machines to be connected in future phases for penetration testing and network security practice.
-
-As a second-year B.Sc. Cybersecurity student, I'm documenting my practical learning experience, configurations, troubleshooting steps and technical knowledge.
+</div>
 
 ---
 
-🎯 Project Requirements
+## 📑 Table of Contents
 
-- [x] Install Oracle VirtualBox.
-- [x] Import Kali Linux 2026.3.
-- [x] Create a custom NAT Network.
-- [x] Configure the network subnet "10.0.0.0/24".
-- [x] Configure Kali Linux with a static IP address.
-- [x] Configure gateway and DNS.
-- [x] Enable clipboard sharing and drag & drop.
-- [x] Configure a shared folder.
-- [x] Create a clean virtual machine snapshot.
-- [x] Configure NetworkManager to resolve the connectivity issue.
-
----
-
-🧰 Lab Specifications
-
-Component| Configuration
-Host OS| Windows
-Hypervisor| Oracle VirtualBox
-Guest OS| Kali Linux 2026.3
-Network Type| NAT Network
-Network Name| NatNetwork
-Subnet| 10.0.0.0/24
-Kali IP Address| 10.0.0.2
-Subnet Mask| 255.255.255.0 (/24)
-Default Gateway| 10.0.0.1
-DNS Server| 10.0.0.1
-DHCP| Enabled at NAT Network level
-VM Name| fresh kali linux
+- [Overview](#-overview)
+- [Project Requirements](#-project-requirements)
+- [Lab Specifications](#-lab-specifications)
+- [Network Architecture](#-network-architecture)
+- [Setup Walkthrough](#-setup-walkthrough)
+- [Screenshots](#-screenshots)
+- [Verification](#-verification)
+- [Troubleshooting](#-troubleshooting)
+- [Key Takeaways](#-key-takeaways)
+- [Phase 2 Roadmap](#-phase-2-roadmap)
+- [Ethical Use](#-ethical-use-disclaimer)
+- [Resources](#-resources)
+- [Author](#-author)
 
 ---
 
-🗺️ Network Architecture
+## 📌 Overview
 
-          HOST MACHINE (WINDOWS)
-                    |
-                    |
-              VIRTUALBOX
-                    |
-                    |
-          NAT NETWORK (NatNetwork)
-               10.0.0.0/24
-                    |
-              Gateway
-               10.0.0.1
-                    |
-          ---------------------
-          |                   |
-      KALI LINUX          FUTURE VMs
-       ATTACKER             TARGETS
-      10.0.0.2          10.0.0.3-99
-          |
-          |
-       INTERNET
+This repository documents **Week 1, Project Module 1 (WK1-PM1)** of my cybersecurity training with **Networkwalks (Batch B084)**: building a private virtual lab for ethical hacking practice.
+
+**Kali Linux** acts as the attacker machine inside **VirtualBox**, connected to a custom **NAT Network (`10.0.0.0/24`)**. Kali uses a manually assigned static IP and has full internet access. The network is built to host additional target machines in later phases.
+
+I'm a second-year B.Sc. Cybersecurity student, and I'm keeping this record of my setup, the problems I hit, and what I learned.
 
 ---
 
-🪜 Setup Walkthrough
+## 🎯 Project Requirements
 
-Step 1: Install 7-Zip
+- [x] VirtualBox used as the base hypervisor
+- [x] Kali Linux set up as the attacking machine
+- [x] Custom NAT Network created on `10.0.0.0/24`
+- [x] Clipboard sharing and drag & drop enabled
+- [x] Host `Downloads` folder shared with the Kali VM
+- [x] Kali assigned the static IP `10.0.0.2/24`
+- [x] Full internet access confirmed from Kali
+- [x] Clean VM snapshot created
 
-Installed 7-Zip to extract the downloaded Kali Linux VirtualBox archive.
+---
 
-Step 2: Install Oracle VirtualBox
+## 🧰 Lab Specifications
 
-Downloaded and installed Oracle VirtualBox to create and manage virtual machines.
+| Component | Details |
+|---|---|
+| Host OS | Windows 10 / 11 *(edit)* |
+| Host Hardware | *(e.g. 8 GB RAM, Core i5, 256 GB SSD)* |
+| Hypervisor | VirtualBox *(version)* |
+| Guest OS | Kali Linux 2026.3 |
+| Kali VM RAM | *(e.g. 2048 MB)* |
+| Network Type | NAT Network (custom) |
+| Network Name | `NatNetwork` |
+| Subnet | `10.0.0.0/24` |
+| Kali IP | `10.0.0.2/24` (static) |
+| Gateway | `10.0.0.1` |
+| DNS | `10.0.0.1` |
+| Reserved Lab Range | `10.0.0.2 – 10.0.0.99` |
 
-Step 3: Create NAT Network
+---
 
-Navigated to:
+## 🗺️ Network Architecture
 
-"VirtualBox → File → Tools → Network → NAT Networks"
+```text
+ ┌───────────────────────────────────────────────────────┐
+ │  Host Machine (Windows 10/11)                         │
+ │                                                       │
+ │   ┌───────────────────────────────────────────────┐   │
+ │   │ VirtualBox: NatNetwork (10.0.0.0/24)          │   │
+ │   │ Gateway: 10.0.0.1                             │   │
+ │   │                                               │   │
+ │   │   ┌──────────────────┐                        │   │
+ │   │   │   Kali Linux     │  ← Attacker machine    │   │
+ │   │   │   10.0.0.2/24    │                        │   │
+ │   │   └──────────────────┘                        │   │
+ │   │                                               │   │
+ │   │   Future target VMs: 10.0.0.3 – 10.0.0.99     │   │
+ │   └───────────────────────────────────────────────┘   │
+ │                          │                            │
+ └──────────────────────────┼────────────────────────────┘
+                            ▼
+                        Internet
+```
 
-Created a custom NAT Network with the following configuration:
+---
 
-Network Name : NatNetwork
-IPv4 Prefix  : 10.0.0.0/24
-DHCP         : Enabled
-IPv6         : Disabled
+## 🪜 Setup Walkthrough
 
-A NAT Network allows connected virtual machines to communicate with each other while accessing the internet through NAT.
+### Step 1: Install 7-Zip
+Kali's pre-built VirtualBox image ships as a compressed archive, so I installed 7-Zip to extract it.
 
-Step 4: Import Kali Linux
+### Step 2: Install VirtualBox
+Downloaded from the official website and installed on the host.
 
-Downloaded the official Kali Linux 2026.3 VirtualBox image, extracted the archive and imported the virtual machine.
+### Step 3: Create the NAT Network
+**File → Tools → Network → NAT Networks**
 
-Configured the following settings:
+```text
+Name        : NatNetwork
+IPv4 Prefix : 10.0.0.0/24
+DHCP        : Enabled
+IPv6        : Disabled
+```
 
-Network Adapter : NAT Network
-Network Name    : NatNetwork
-Shared Clipboard: Bidirectional
-Drag and Drop   : Bidirectional
-Shared Folder   : Downloads
+> A NAT Network lets all attached VMs talk to each other and still reach the internet, which suits an attacker/target lab.
 
-Step 5: Configure Static IP Address
+### Step 4: Import Kali Linux
+Downloaded the official Kali 2026.3 VirtualBox image, extracted it with 7-Zip, and imported it.
 
-Opened Network Manager in Kali Linux and selected:
+```text
+Network Adapter 1 : Attached to NAT Network
+Network Name      : NatNetwork
+Adapter Type      : Intel PRO/1000 MT Desktop
+Promiscuous Mode  : Allow All
+Shared Clipboard  : Bidirectional
+Drag and Drop     : Bidirectional
+Shared Folder     : Host "Downloads" (Auto-mount, Full access)
+```
 
-"Wired Connection 1 → IPv4 Settings → Manual"
+### Step 5: Configure the Static IP in Kali
+Opened **Edit Connections → Wired connection 1 → IPv4 Settings**, set the method to **Manual**:
 
-Configured the following:
-
+```text
 Address : 10.0.0.2
 Netmask : 24
 Gateway : 10.0.0.1
 DNS     : 10.0.0.1
+```
 
-This assigns a static IP address to the Kali Linux machine.
-
-Step 6: Resolve Network Connectivity Issue
-
-While configuring the network, I encountered a connectivity issue.
-
-I used the following command to modify the NetworkManager connection:
-
+### Step 6: Fix the connection delay (DAD timeout)
+```bash
 sudo nmcli connection modify "Wired connection 1" ipv4.dad-timeout 0
+```
 
-This changes the IPv4 Duplicate Address Detection timeout.
+### Step 7: Take a Snapshot
+After confirming everything worked, I saved a snapshot:
 
-Step 7: Create Virtual Machine Snapshot
+```text
+Clean Kali - Network Configured
+```
 
-Created a snapshot of the Kali Linux virtual machine to preserve the configured environment and provide a recovery point for future experiments.
-
----
-
-📸 Project Screenshots
-
-1. VirtualBox Manager
-
-Virtual machine management and snapshot configuration.
-
-"VirtualBox Manager" (screenshots/1000267552.jpg)
-
-2. Kali Linux Desktop
-
-Successfully booted Kali Linux virtual machine.
-
-"Kali Linux Desktop" (screenshots/1000267553.jpg)
-
-3. Static IP Configuration
-
-Manual IPv4 configuration with static IP, subnet mask and gateway.
-
-"IPv4 Configuration" (screenshots/1000267554.jpg)
-
-4. NetworkManager Configuration
-
-Executing the NetworkManager command to modify the IPv4 DAD timeout.
-
-"Terminal Configuration" (screenshots/1000267555.jpg)
-
-5. GitHub Repository
-
-Project documentation and repository structure.
-
-"GitHub Repository" (screenshots/1000267556.jpg)
+This gives me a safe baseline to restore if I break something later.
 
 ---
 
-🔍 Network Verification Commands
+## 📸 Screenshots
 
-The following commands can be used to verify the network configuration:
+### 1. NAT Network settings
+<img src="VirtualBox_kali-linux-2026.3-virtualbox-amd64_REPLACE_1.png" alt="NAT Network settings" width="800">
 
-Purpose| Command
-Check IP address| "ip a"
-Check routing table| "ip route"
-Ping gateway| "ping -c 4 10.0.0.1"
-Test internet connectivity| "ping -c 4 8.8.8.8"
-Test DNS resolution| "nslookup google.com"
-Check Nmap version| "nmap --version"
+### 2. Kali VM settings
+<img src="VirtualBox_kali-linux-2026.3-virtualbox-amd64_REPLACE_2.png" alt="Kali VM settings" width="800">
+
+### 3. Kali IP configuration and ping test
+<img src="VirtualBox_kali-linux-2026.3-virtualbox-amd64_REPLACE_3.png" alt="Kali IP configuration and ping test" width="800">
+
+### 4. Static IPv4 configuration in Kali
+<img src="IMG-20261030-WA0076.jpg" alt="Static IPv4 settings in Kali" width="800">
+
+### 5. Applying the DAD timeout fix
+<img src="IMG-20261030-WA0075.jpg" alt="nmcli DAD timeout fix in terminal" width="800">
 
 ---
 
-🐞 Problems Faced & Troubleshooting
+## ✅ Verification
 
-Problem 1: Network Connectivity Issue
+| Test | Command | Expected Result |
+|---|---|---|
+| Check IP | `ip a` | Shows `10.0.0.2/24` |
+| Ping gateway | `ping -c 4 10.0.0.1` | Replies received |
+| Ping internet | `ping -c 4 8.8.8.8` | Replies received |
+| DNS lookup | `nslookup google.com` | Domain resolves |
+| Tool check | `nmap --version` | Version displayed |
+| Shared folder | `ls /media/sf_Downloads` | Host files visible |
 
-Issue: Encountered a connectivity issue after configuring the static IPv4 address.
+---
 
-Solution: Modified the IPv4 DAD timeout using NetworkManager.
+## 🐞 Troubleshooting
 
+### Problem: No internet after setting the static IP
+**Cause:** A known issue with VirtualBox 7 and newer Kali releases, where NetworkManager's duplicate address detection (DAD) delays the connection.
+
+**Fix:**
+
+```bash
 sudo nmcli connection modify "Wired connection 1" ipv4.dad-timeout 0
+sudo nmcli connection down "Wired connection 1"
+sudo nmcli connection up "Wired connection 1"
+```
 
-Problem 2: Static IP Configuration
+Then restart Kali and test again.
 
-Issue: Needed a fixed IP address for the attacker machine.
+**If it still fails:**
+- Confirm the NAT Network exists and is attached to the VM
+- Make sure no other VM uses `10.0.0.2`
+- Try `8.8.8.8` as the DNS server
 
-Solution: Configured IPv4 manually through Network Manager.
-
-IP Address : 10.0.0.2
-Gateway    : 10.0.0.1
-Netmask    : 255.255.255.0
-
----
-
-📚 Key Learnings
-
-Through this project, I learned:
-
-1. How to install and configure Oracle VirtualBox.
-2. How to import and manage Kali Linux virtual machines.
-3. Difference between NAT and NAT Network.
-4. Understanding IPv4 addressing and subnet masks.
-5. Configuring static IP addresses.
-6. Understanding gateways and DNS servers.
-7. Basic Linux networking commands.
-8. Troubleshooting network connectivity using NetworkManager.
-9. Importance of virtual machine snapshots.
-10. Building an isolated environment for ethical hacking practice.
+### Problem: *(add your own, or delete this section)*
+- **What happened:** …
+- **How I fixed it:** …
 
 ---
 
-🔭 Phase 2: Future Plans
+## 📚 Key Takeaways
 
-The next phase involves adding multiple target machines to the same virtual network.
-
-Machine| Planned IP| Status
-Kali Linux (Attacker)| 10.0.0.2| ✅ Completed
-Windows 10| 10.0.0.10| ⬜ Planned
-Windows 11| 10.0.0.11| ⬜ Planned
-Windows 7| 10.0.0.7| ⬜ Planned
-Android VM| 10.0.0.9| ⬜ Planned
-Windows Server 2016| 10.0.0.16| ⬜ Planned
-
-Upcoming Activities
-
-- Configure target virtual machines.
-- Establish communication between virtual machines.
-- Perform network discovery using Nmap.
-- Practice port scanning.
-- Understand open ports and running services.
-- Perform vulnerability assessment in the isolated lab.
+- **NAT vs NAT Network:** plain NAT isolates each VM; a NAT Network lets VMs talk to each other and still reach the internet.
+- **Static addressing:** how IP, netmask, gateway, and DNS work together.
+- **Systematic troubleshooting:** test IP → gateway → internet → DNS to find where connectivity breaks.
+- **Snapshots:** a clean baseline makes experimenting safe.
+- **Documentation:** recording every step is part of doing security work properly.
 
 ---
 
-⚠️ Ethical Use Disclaimer
+## 🔭 Phase 2 Roadmap
 
-This project is strictly for educational purposes and authorized cybersecurity testing.
+| Machine | Planned IP | Status |
+|---|---|---|
+| Kali Linux (attacker) | 10.0.0.2 | ✅ Done |
+| Windows 10 VM | 10.0.0.10 | ⬜ Planned |
+| Windows 11 VM | 10.0.0.11 | ⬜ Planned |
+| Windows 7 VM | 10.0.0.7 | ⬜ Planned |
+| Android VM | 10.0.0.9 | ⬜ Planned |
+| Windows Server 2016 | 10.0.0.16 | ⬜ Planned |
 
-All penetration testing and security experiments will be performed only on systems that I own or have explicit permission to test.
-
----
-
-🔗 Resources
-
-- "Kali Linux Official Website" (https://www.kali.org/)
-- "Oracle VirtualBox" (https://www.virtualbox.org/wiki/Downloads)
-- "7-Zip" (https://www.7-zip.org/)
-- "NetworkManager Documentation" (https://networkmanager.dev/docs/)
+**Next goals:** ping tests between all machines, snapshots of each, and Nmap scanning practice.
 
 ---
 
-👨‍💻 Author
+## ⚠️ Ethical Use Disclaimer
 
-Salil Zameer Shaikh
-
-B.Sc. Cybersecurity Student | Second Year
-Networkwalks – Batch B084
-
-- GitHub: "salilshk12-tech" (https://github.com/salilshk12-tech)
-- LinkedIn: Add your LinkedIn profile URL here.
+This lab is for **education and legal practice only**. I only test systems that I own or have explicit permission to test. Using these tools against anyone else's systems is illegal and unethical.
 
 ---
 
-<div align="center">Learning. Practicing. Securing.
+## 🔗 Resources
 
-Documenting my journey into Cybersecurity and Ethical Hacking.
+- [7-Zip](https://7-zip.org/download.html)
+- [VirtualBox Downloads](https://virtualbox.org/wiki/Downloads)
+- [Kali Linux Downloads](https://kali.org/get-kali)
+
+---
+
+## 👤 Author
+
+**Your Name**
+B.Sc. Cybersecurity Student (Year 2) | Networkwalks Batch B084
+
+[LinkedIn](https://linkedin.com/in/your-profile) • [GitHub](https://github.com/salilshk12-tech)
+
+---
+
+<div align="center">
+
+*Part of my cybersecurity learning journey. Updated as the lab grows.*
 
 </div>
